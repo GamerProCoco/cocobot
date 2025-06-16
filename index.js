@@ -1,5 +1,4 @@
 const { Client, GatewayIntentBits, Partials, ActionRowBuilder, ButtonBuilder, ButtonStyle, ChannelType, PermissionsBitField, StringSelectMenuBuilder, StringSelectMenuOptionBuilder } = require('discord.js');
-const config = require('./config.json');
 
 const client = new Client({
   intents: [
@@ -18,11 +17,11 @@ client.once('ready', () => {
 client.on('messageCreate', async (message) => {
   console.log(`[MESSAGE] ${message.author.tag}: ${message.content}`);
 
-  if (message.content === `${config.prefix}ping`) {
+  if (message.content === `!ping`) {
     return message.reply(`🏓 Pong ! Latence : ${Date.now() - message.createdTimestamp}ms`);
   }
 
-  if (message.content === `${config.prefix}setup-tickets`) {
+  if (message.content === `!setup-tickets`) {
     const row = new ActionRowBuilder().addComponents(
       new ButtonBuilder()
         .setCustomId('ticket_button')
@@ -36,7 +35,7 @@ client.on('messageCreate', async (message) => {
     });
   }
 
-  if (message.content === `${config.prefix}ticketsfermes`) {
+  if (message.content === `!ticketsfermes`) {
     console.log("Commande détectée : !ticketsfermes");
 
     const row = new ActionRowBuilder().addComponents(
@@ -53,7 +52,7 @@ client.on('messageCreate', async (message) => {
     });
   }
 
-  if (message.content === `${config.prefix}ticketsouverts`) {
+  if (message.content === `!ticketsouverts`) {
     console.log("Commande détectée : !ticketsouverts");
 
     const row = new ActionRowBuilder().addComponents(
@@ -69,7 +68,7 @@ client.on('messageCreate', async (message) => {
     });
   }
 
-  if (message.content === `${config.prefix}close`) {
+  if (message.content === `!close`) {
     if (!message.channel.name.startsWith('ticket-')) return;
     await message.reply('⏳ Fermeture du ticket dans 3 secondes...');
     setTimeout(() => {
@@ -129,15 +128,15 @@ client.on('interactionCreate', async (interaction) => {
         parent: category?.id,
         permissionOverwrites: [
           {
-            id: '1371258228020740347',
-            allow: [PermissionsBitField.Flags.ViewChannel, PermissionsBitField.Flags.SendMessages]
-          },
-          {
             id: guild.roles.everyone,
             deny: [PermissionsBitField.Flags.ViewChannel]
           },
           {
             id: member.id,
+            allow: [PermissionsBitField.Flags.ViewChannel, PermissionsBitField.Flags.SendMessages]
+          },
+          {
+            id: '1371258228020740347',
             allow: [PermissionsBitField.Flags.ViewChannel, PermissionsBitField.Flags.SendMessages]
           },
           {
@@ -163,5 +162,3 @@ client.on('interactionCreate', async (interaction) => {
     }
   }
 });
-
-client.login(config.token);
